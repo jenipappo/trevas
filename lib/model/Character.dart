@@ -1,44 +1,86 @@
+import "dart:math";
 
 class Character {
 
-  String name;
+  Uri photo;
   int wight;
   int height;
-  DateTime birthday;
-  String birthplace;
-  Sex sex;
-  String job;
   int age;
   int apparentAge;
+  Sex sex;
+  String name;
+  String birthplace;
+  String job;
   String religion;
   String lore;
-  Attributes _attributes = Attributes();
-  List<Skill> _skills = List();
-  List<String> _languages = List();
-  List<Power> _powers = List();
-  List<Enhancement> _enhancements = List();
+  DateTime birthday;
 
-  Attributes get attributes => _attributes;
-  List<Skill> get skills => _skills;
-  List<String> get languages => _languages;
-  List<Power> get powers => _powers;
-  List<Enhancement> get enhancements => _enhancements;
+  final Attributes attributes = Attributes();
+  final Properties properties = Properties();
+  final List<WeaponSkill> weaponSkills = List();
+  final List<Skill> skills = List();
+  final List<String> languages = List();
+  final List<Power> powers = List();
+  final List<Enhancement> enhancements = List();
 }
 
-enum Sex { male, female }
+enum Sex {
+  male,
+  female
+}
+
+enum AttributeType {
+  constitution,
+  strength,
+  dexterity,
+  agility,
+  intelligence,
+  willpower,
+  perception,
+  charisma
+}
+
+enum PropertyType {
+  healthPoints,
+  magicPoints,
+  protectionIndex,
+  initiative,
+  heroism,
+  faith
+}
 
 class Attribute {
-  String alias;
-  int base;
-  int modifier;
-  int get percentage => base * 4;
+  final AttributeType type;
 
-  Attribute(this.alias, [this.base, this.modifier]);
+  int base;
+  int bonus;
+  int modifier;
+
+  Attribute(this.type, [this.base, this.modifier, this.bonus]);
+
+  get percentage => base * 4;
+  get current => base + bonus;
 }
 
+class Property {
+  final PropertyType type;
 
-class StrengthAttribute extends Attribute {
-  StrengthAttribute(String alias,[int base, int modifier]) : super(alias, base, modifier);
+  int base;
+  int bonus;
+  int _current;
+
+  Property(this.type);
+
+  get maximum => base + bonus;
+  get current => _current;
+
+  set current(value) {
+    this._current = min(maximum, value);
+  }
+}
+
+class _StrengthAttribute extends Attribute {
+  _StrengthAttribute(AttributeType type,[int base, int modifier, int bonus]) : super(type, base, modifier, bonus);
 
   set base(int base) {
     super.base = base;
@@ -49,52 +91,67 @@ class StrengthAttribute extends Attribute {
   }
 }
 
-
 class Attributes {
-  Attribute _constitution = Attribute("CON");
-  Attribute _strength = Attribute("FOR");
-  Attribute _dexterity = Attribute("DEX");
-  Attribute _agility = Attribute("AGI");
-  Attribute _intelligence = Attribute("INT");
-  Attribute _willpower = Attribute("WILL");
-  Attribute _perception = Attribute("PER");
-  Attribute _charisma = Attribute("CAR");
+  final Attribute constitution = Attribute(AttributeType.constitution);
+  final Attribute strength = _StrengthAttribute(AttributeType.strength);
+  final Attribute dexterity = Attribute(AttributeType.dexterity);
+  final Attribute agility = Attribute(AttributeType.agility);
+  final Attribute intelligence = Attribute(AttributeType.intelligence);
+  final Attribute willpower = Attribute(AttributeType.willpower);
+  final Attribute perception = Attribute(AttributeType.perception);
+  final Attribute charisma = Attribute(AttributeType.charisma);
+}
 
-  Attribute get constitution => _constitution;
-  Attribute get strength => _strength;
-  Attribute get dexterity => _dexterity;
-  Attribute get agility => _agility;
-  Attribute get intelligence => _intelligence;
-  Attribute get willpower => _willpower;
-  Attribute get perception => _perception;
-  Attribute get charisma => _charisma;
+class Properties {
+  final Property healthPoints = Property(PropertyType.healthPoints);
+  final Property magicPoints = Property(PropertyType.magicPoints);
+  final Property protectionIndex = Property(PropertyType.protectionIndex);
+  final Property initiative = Property(PropertyType.initiative);
+  final Property heroism = Property(PropertyType.heroism);
+  final Property faith = Property(PropertyType.faith);
 }
 
 class Skill {
-  String name;
-  Attribute attribute;
+  final String name;
+  final Attribute attribute;
+
   int points;
-  int get percentage => attribute?.base ?? 0 + points;
 
   Skill(this.name, this.attribute, this.points);
+
+  get percentage => attribute?.base ?? 0 + points;
+}
+
+class WeaponSkill {
+  final Attributes _attributes;
+
+  final String name;
+  final int baseAttack;
+  final int baseDefense;
+
+  int bonusAttack;
+  int bonusDefense;
+  String damage;
+
+  WeaponSkill(this.name, this.baseAttack, this.baseDefense, this._attributes);
+
+  get attack => _attributes.dexterity.current + baseAttack + bonusAttack;
+  get defense => _attributes.dexterity.current + baseDefense + bonusDefense;
 }
 
 class Power {
-  int _level;
-  String _name;
+  final String name;
 
-  int get level => _level;
-  String get name => _name;
+  int level;
 
-  Power(this._name, this._level);
+  Power(this.name, this.level);
 }
 
 class Enhancement {
-  int _level;
-  String _name;
+  final String name;
 
-  int get level => _level;
-  String get name => _name;
+  int level;
 
-  Enhancement(this._name, this._level);
+  Enhancement(this.name, this.level);
 }
+
