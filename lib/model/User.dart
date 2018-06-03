@@ -1,14 +1,9 @@
 class User {
-  String _id;
-  String _name;
-  String _email;
-  String _username;
+  final String id;
+  final String name;
+  final String email;
+  final String username;
 
-  String get id => _id;
-  String get name => _name;
-  String get email => _email;
-  String get username => _username;
-
-  User(this._id, this._name, this._email, this._username);
+  User(this.id, this.name, this.email, this.username);
 
 }
