@@ -1,18 +1,16 @@
+import 'package:trevas/model/Character.dart';
 import 'package:trevas/model/User.dart';
 
 class Game {
-  String _id;
-  String _name;
-  String _description;
-  User _master;
-  User _owner;
+  final String id;
 
-  String get id => _id;
-  String get name => _name;
-  String get description => _description;
-  User get master => _master;
-  User get owner => _owner;
+  String name;
+  String description;
+  User master;
+  User owner;
 
-  Game(this._id, this._name, this._description, this._master, this._owner);
+  final List<Character> characters = List();
+
+  Game(this.id, this.name, this.description, this.master, this.owner);
 
 }

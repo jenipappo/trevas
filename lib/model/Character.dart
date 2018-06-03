@@ -1,157 +1,101 @@
-import "dart:math";
+import 'package:trevas/model/Attribute.dart';
+import 'package:trevas/model/AttributeType.dart';
+import 'package:trevas/model/Enhancement.dart';
+import 'package:trevas/model/Equipment.dart';
+import 'package:trevas/model/Experience.dart';
+import 'package:trevas/model/Gender.dart';
+import 'package:trevas/model/Expertise.dart';
+import 'package:trevas/model/Weapon.dart';
+import 'package:trevas/model/WeaponMastery.dart';
 
 class Character {
+  final String id;
 
+  /// Character photo URL.
   Uri photo;
+  /// Character weight.
   int wight;
+  /// Character height.
   int height;
+  /// Character actual age.
   int age;
+  /// Character apparent age.
   int apparentAge;
-  Sex sex;
+  /// Character sex.
+  Gender gender;
+  /// Character name.
   String name;
+  /// Character birthplace.
   String birthplace;
+  /// Character job.
   String job;
+  /// Character religion.
   String religion;
+  /// Character lore or description.
   String lore;
+  /// Character birthday.
   DateTime birthday;
-
-  final Attributes attributes = Attributes();
-  final Properties properties = Properties();
-  final List<WeaponSkill> weaponSkills = List();
-  final List<Skill> skills = List();
+  /// Character equipments
+  final Equipments equipments = Equipments();
+  /// List of languages spoken by the character.
   final List<String> languages = List();
-  final List<Power> powers = List();
+  /// Character experience. Determines the character level.
+  final Experience experience = Experience();
+  /// All kinds of attributes are here. Health, strength, faith, magic, focus,
+  /// initiative are some of them.
+  final Attributes attributes = Attributes();
+  /// These are masteries specific to a weapon type.
+  final List<WeaponMastery> weaponMasteries = List();
+  /// This is the list of character masteries.
+  /// Examples include swimming, driving, dealing with explosives, jumping,
+  /// furtiveness, leadership, ect.
+  final List<Mastery> masteries = List();
+  /// List of all enhancements for this character.
+  /// Enhancements include extra attacks, wings, etc or
+  /// heroic points, magic objects, et al.
   final List<Enhancement> enhancements = List();
-}
 
-enum Sex {
-  male,
-  female
-}
-
-enum AttributeType {
-  constitution,
-  strength,
-  dexterity,
-  agility,
-  intelligence,
-  willpower,
-  perception,
-  charisma
-}
-
-enum PropertyType {
-  healthPoints,
-  magicPoints,
-  protectionIndex,
-  initiative,
-  heroism,
-  faith
-}
-
-class Attribute {
-  final AttributeType type;
-
-  int base;
-  int bonus;
-  int modifier;
-
-  Attribute(this.type, [this.base, this.modifier, this.bonus]);
-
-  get percentage => base * 4;
-  get current => base + bonus;
-}
-
-class Property {
-  final PropertyType type;
-
-  int base;
-  int bonus;
-  int _current;
-
-  Property(this.type);
-
-  get maximum => base + bonus;
-  get current => _current;
-
-  set current(value) {
-    this._current = min(maximum, value);
-  }
-}
-
-class _StrengthAttribute extends Attribute {
-  _StrengthAttribute(AttributeType type,[int base, int modifier, int bonus]) : super(type, base, modifier, bonus);
-
-  set base(int base) {
-    super.base = base;
-    super.modifier = () {
-      if (base < 15) return 0;
-      return ((base - 15) / 2).floor();
-    }();
-  }
+  Character(this.id);
 }
 
 class Attributes {
-  final Attribute constitution = Attribute(AttributeType.constitution);
-  final Attribute strength = _StrengthAttribute(AttributeType.strength);
-  final Attribute dexterity = Attribute(AttributeType.dexterity);
-  final Attribute agility = Attribute(AttributeType.agility);
-  final Attribute intelligence = Attribute(AttributeType.intelligence);
-  final Attribute willpower = Attribute(AttributeType.willpower);
-  final Attribute perception = Attribute(AttributeType.perception);
-  final Attribute charisma = Attribute(AttributeType.charisma);
+  static const _exceptions = [ AttributeType.damage];
+
+  get constitution => _values[AttributeType.constitution];
+  get strength => _values[AttributeType.strength];
+  get dexterity => _values[AttributeType.dexterity];
+  get agility => _values[AttributeType.agility];
+  get intelligence => _values[AttributeType.intelligence];
+  get willpower => _values[AttributeType.willpower];
+  get perception => _values[AttributeType.perception];
+  get charisma => _values[AttributeType.charisma];
+  get healthPoints => _values[AttributeType.healthPoints];
+  get magicPoints => _values[AttributeType.magicPoints];
+  get protectionIndex => _values[AttributeType.protectionIndex];
+  get initiative => _values[AttributeType.initiative];
+  get heroism => _values[AttributeType.heroism];
+  get faith => _values[AttributeType.faith];
+
+  get values => _values;
+
+  final Map<AttributeType, Attribute> _values =
+    AttributeType.values
+      .where((t) => !_exceptions.contains(t))
+      .map((t) => Attribute(t))
+      .fold(Map<AttributeType, Attribute>(), (map, attribute) {
+        map[attribute.type] = attribute;
+        return map;
+      });
 }
 
-class Properties {
-  final Property healthPoints = Property(PropertyType.healthPoints);
-  final Property magicPoints = Property(PropertyType.magicPoints);
-  final Property protectionIndex = Property(PropertyType.protectionIndex);
-  final Property initiative = Property(PropertyType.initiative);
-  final Property heroism = Property(PropertyType.heroism);
-  final Property faith = Property(PropertyType.faith);
+
+class Equipments {
+  Weapon leftHand;
+  Weapon rightHand;
+  Equipment head;
+  Equipment armor;
+  Equipment boots;
+  Equipment ring1;
+  Equipment ring2;
+  Equipment amulet;
 }
-
-class Skill {
-  final String name;
-  final Attribute attribute;
-
-  int points;
-
-  Skill(this.name, this.attribute, this.points);
-
-  get percentage => attribute?.base ?? 0 + points;
-}
-
-class WeaponSkill {
-  final Attributes _attributes;
-
-  final String name;
-  final int baseAttack;
-  final int baseDefense;
-
-  int bonusAttack;
-  int bonusDefense;
-  String damage;
-
-  WeaponSkill(this.name, this.baseAttack, this.baseDefense, this._attributes);
-
-  get attack => _attributes.dexterity.current + baseAttack + bonusAttack;
-  get defense => _attributes.dexterity.current + baseDefense + bonusDefense;
-}
-
-class Power {
-  final String name;
-
-  int level;
-
-  Power(this.name, this.level);
-}
-
-class Enhancement {
-  final String name;
-
-  int level;
-
-  Enhancement(this.name, this.level);
-}
-
