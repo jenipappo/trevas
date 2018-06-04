@@ -6,5 +6,8 @@ enum WeaponKind {
   bow,
   martial,
   shield,
-  firearm
+  firearm,
+  staff,
+  wand,
+  maul
 }

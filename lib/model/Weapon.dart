@@ -1,4 +1,5 @@
 import 'package:trevas/model/Equipment.dart';
+import 'package:trevas/model/EquipmentType.dart';
 import 'package:trevas/model/WeaponKind.dart';
 
 class Weapon extends Equipment {
@@ -8,7 +9,7 @@ class Weapon extends Equipment {
   final int bonusAttack;
   final int bonusDefense;
 
-  Weapon(this.kind, this.damage, this.bonusAttack, this.bonusDefense);
+  Weapon(this.kind, this.damage, this.bonusAttack, this.bonusDefense) : super(EquipmentType.weapon);
 }
 
 /// Class representing an weapon damage
