@@ -2,9 +2,11 @@ import 'package:trevas/model/Attribute.dart';
 import 'package:trevas/model/AttributeType.dart';
 import 'package:trevas/model/Enhancement.dart';
 import 'package:trevas/model/Equipment.dart';
+import 'package:trevas/model/EquipmentType.dart';
 import 'package:trevas/model/Experience.dart';
-import 'package:trevas/model/Gender.dart';
 import 'package:trevas/model/Expertise.dart';
+import 'package:trevas/model/Gender.dart';
+import 'package:trevas/model/Item.dart';
 import 'package:trevas/model/Weapon.dart';
 import 'package:trevas/model/WeaponMastery.dart';
 
@@ -21,7 +23,9 @@ class Character {
   int age;
   /// Character apparent age.
   int apparentAge;
-  /// Character sex.
+  /// Character gold and resources.
+  int resources;
+  /// Character gender.
   Gender gender;
   /// Character name.
   String name;
@@ -50,10 +54,15 @@ class Character {
   /// Examples include swimming, driving, dealing with explosives, jumping,
   /// furtiveness, leadership, ect.
   final List<Mastery> masteries = List();
-  /// List of all enhancements for this character.
-  /// Enhancements include extra attacks, wings, etc or
-  /// heroic points, magic objects, et al.
-  final List<Enhancement> enhancements = List();
+  /// List of all powers for this character.
+  /// Powers include extra attacks, wings, etc.
+  final List<Enhancement> powers = List();
+  /// List of all improvements for this character.
+  /// Improvements include heroic points, magic objects, et al.
+  final List<Enhancement> improvements = List();
+  /// Contains all items the character is carrying including items that
+  /// are currently equipped.
+  final List<Item> items = List();
 
   Character(this.id);
 }
@@ -88,14 +97,43 @@ class Attributes {
       });
 }
 
-
 class Equipments {
   Weapon leftHand;
   Weapon rightHand;
-  Equipment head;
-  Equipment armor;
-  Equipment boots;
-  Equipment ring1;
-  Equipment ring2;
-  Equipment amulet;
+  Equipment _head;
+  Equipment _armor;
+  Equipment _boots;
+  Equipment _ring;
+  Equipment _amulet;
+
+  get headgear => _head;
+  get armor => _armor;
+  get boots => _boots;
+  get ring => _ring;
+  get amulet => _amulet;
+
+  set headgear(Equipment value) {
+    if (value.type != EquipmentType.headgear) return;
+    _head = value;
+  }
+
+  set armor(Equipment value) {
+    if (value.type != EquipmentType.armor) return;
+    _armor = value;
+  }
+
+  set boots(Equipment value) {
+    if (value.type != EquipmentType.boots) return;
+    _boots = value;
+  }
+
+  set ring(Equipment value) {
+    if (value.type != EquipmentType.ring) return;
+    _ring = value;
+  }
+
+  set amulet(Equipment value) {
+    if (value.type != EquipmentType.amulet) return;
+    _amulet = value;
+  }
 }
