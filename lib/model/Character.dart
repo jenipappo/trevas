@@ -4,9 +4,9 @@ import 'package:trevas/model/Enhancement.dart';
 import 'package:trevas/model/Equipment.dart';
 import 'package:trevas/model/EquipmentType.dart';
 import 'package:trevas/model/Experience.dart';
-import 'package:trevas/model/Expertise.dart';
 import 'package:trevas/model/Gender.dart';
 import 'package:trevas/model/Item.dart';
+import 'package:trevas/model/Mastery.dart';
 import 'package:trevas/model/Weapon.dart';
 import 'package:trevas/model/WeaponMastery.dart';
 
@@ -16,7 +16,7 @@ class Character {
   /// Character photo URL.
   Uri photo;
   /// Character weight.
-  int wight;
+  int weight;
   /// Character height.
   int height;
   /// Character actual age.
@@ -68,7 +68,6 @@ class Character {
 }
 
 class Attributes {
-  static const _exceptions = [ AttributeType.damage];
 
   get constitution => _values[AttributeType.constitution];
   get strength => _values[AttributeType.strength];
@@ -84,29 +83,36 @@ class Attributes {
   get initiative => _values[AttributeType.initiative];
   get heroism => _values[AttributeType.heroism];
   get faith => _values[AttributeType.faith];
+  get baseDamage => _values[AttributeType.damage];
 
   get values => _values;
 
-  final Map<AttributeType, Attribute> _values =
-    AttributeType.values
-      .where((t) => !_exceptions.contains(t))
-      .map((t) => Attribute(t))
-      .fold(Map<AttributeType, Attribute>(), (map, attribute) {
-        map[attribute.type] = attribute;
-        return map;
-      });
+  final Map<AttributeType, Attribute> _values = Map();
+
+  Attributes() {
+    AttributeType.values.forEach((t) {
+      switch (t) {
+        case AttributeType.damage:
+          _values[t] = _StrengthDerivedBaseDamage(this.strength);
+          break;
+
+        default:
+          _values[t] = Attribute(t);
+      }
+    });
+  }
 }
 
 class Equipments {
   Weapon leftHand;
   Weapon rightHand;
-  Equipment _head;
+  Equipment _headgear;
   Equipment _armor;
   Equipment _boots;
   Equipment _ring;
   Equipment _amulet;
 
-  get headgear => _head;
+  get headgear => _headgear;
   get armor => _armor;
   get boots => _boots;
   get ring => _ring;
@@ -114,7 +120,7 @@ class Equipments {
 
   set headgear(Equipment value) {
     if (value.type != EquipmentType.headgear) return;
-    _head = value;
+    _headgear = value;
   }
 
   set armor(Equipment value) {
@@ -135,5 +141,27 @@ class Equipments {
   set amulet(Equipment value) {
     if (value.type != EquipmentType.amulet) return;
     _amulet = value;
+  }
+}
+
+class _StrengthDerivedBaseDamage extends Attribute {
+
+  Attribute _strengthAttribute;
+
+  @override
+  get value {
+    if (_strengthAttribute.value < 15) return 0;
+    return ((_strengthAttribute.value - 13) / 2).floor();
+  }
+
+  @override
+  set value(int value) {
+    // ignore, base damage value can't be set
+  }
+
+  _StrengthDerivedBaseDamage(this._strengthAttribute) : super(AttributeType.damage) {
+    if (_strengthAttribute.type != AttributeType.strength) {
+      throw new ArgumentError("BaseDamageAttribute: need the strenght attribute to calculate base damange");
+    }
   }
 }

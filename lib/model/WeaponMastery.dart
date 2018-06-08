@@ -1,18 +1,24 @@
-import 'package:trevas/model/Character.dart';
-import 'package:trevas/model/WeaponKind.dart';
+import 'package:trevas/model/Attribute.dart';
+import 'package:trevas/model/AttributeType.dart';
+import 'package:trevas/model/MasteryPonts.dart';
+import 'package:trevas/model/WeaponType.dart';
 
 
 class WeaponMastery {
-  final Attributes _attributes;
+  final Attribute _attribute;
 
-  final int baseAttack;
-  final int baseDefense;
-  final WeaponKind kind;
+  final MasteryPoints attackPoints;
+  final MasteryPoints defensePoints;
+  final WeaponType weaponType;
 
-  WeaponMastery(this.kind, this.baseAttack, this.baseDefense, this._attributes);
+  WeaponMastery(this.weaponType, this.attackPoints, this.defensePoints, this._attribute) {
+    if (_attribute.type != AttributeType.dexterity) {
+      throw ArgumentError("Attribute: must be of dexterity tpe");
+    }
+  }
 
-  get attack => _attributes.dexterity.current + baseAttack;
-  get defense => _attributes.dexterity.current + baseDefense;
+  get attack => _attribute.value + attackPoints.quantity;
+  get defense => _attribute.value + defensePoints.quantity;
 }
 
 // TODO consolidate base attack and defense with bonuses

@@ -1,4 +1,4 @@
-enum WeaponKind {
+enum WeaponType {
   sword,
   mace,
   spear,

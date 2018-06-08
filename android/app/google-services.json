@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "796648866144",
+    "firebase_url": "https://trevas-71c90.firebaseio.com",
+    "project_id": "trevas-71c90",
+    "storage_bucket": "trevas-71c90.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796648866144:android:704d3b5fabe2eea3",
+        "android_client_info": {
+          "package_name": "com.jenipappo.trevas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796648866144-1j57r8g6ietn8cjlafsm7li83ubbfm9f.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "796648866144-1j57r8g6ietn8cjlafsm7li83ubbfm9f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmrl358jiwv5WAtGNq65YjJaYKpsUXd0Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

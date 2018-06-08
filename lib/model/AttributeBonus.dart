@@ -1,8 +1,8 @@
 import 'package:trevas/model/AttributeType.dart';
 
 class AttributeBonus {
-  final AttributeType type;
+  final AttributeType attributeType;
   int value;
 
-  AttributeBonus(this.type);
+  AttributeBonus(this.attributeType);
 }

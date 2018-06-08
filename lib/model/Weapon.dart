@@ -1,24 +1,18 @@
+import 'package:trevas/model/Attribute.dart';
+import 'package:trevas/model/AttributeType.dart';
+import 'package:trevas/model/DiceSet.dart';
 import 'package:trevas/model/Equipment.dart';
 import 'package:trevas/model/EquipmentType.dart';
-import 'package:trevas/model/WeaponKind.dart';
+import 'package:trevas/model/WeaponType.dart';
 
 class Weapon extends Equipment {
 
   final String name;
-  final WeaponKind kind;
-  final Damage damage;
-  final int bonusAttack;
-  final int bonusDefense;
+  final WeaponType weaponType;
+  final Attribute baseDamage = Attribute(AttributeType.damage);
+  final DiceSet dices;
 
-  Weapon(this.name, this.kind, this.damage, this.bonusAttack, this.bonusDefense) : super(EquipmentType.weapon);
-}
-
-/// Class representing an weapon damage
-class Damage {
-  /// Base damage
-  int base;
-  /// Number of dices
-  int diceQuantity;
-  /// Size of the dice i.e. 6 if D6, 10 if D10, etc.
-  int diceSize;
+  Weapon(this.name, this.weaponType, int baseDamage, this.dices) : super(EquipmentType.weapon) {
+    this.baseDamage.value = baseDamage;
+  }
 }
