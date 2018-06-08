@@ -13,5 +13,7 @@ enum AttributeType {
   initiative,
   heroism,
   faith,
-  damage
+  damage,
+  attack,
+  defense
 }

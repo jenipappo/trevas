@@ -1,4 +1,4 @@
-package com.jenipapo.trevas
+package com.jenipappo.trevas
 
 import android.os.Bundle
 

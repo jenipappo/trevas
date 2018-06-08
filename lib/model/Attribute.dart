@@ -7,12 +7,5 @@ class Attribute {
 
   get percentage => value * 4;
 
-  Attribute(this.type);
+  Attribute(this.type, [this.value]);
 }
-
-// TODO move this logic to damage calculation
-//    super.value = base;
-//    super.modifier = () {
-//      if (base < 15) return 0;
-//      return ((base - 15) / 2).floor();
-//    }();
