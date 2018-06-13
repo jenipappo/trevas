@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trevas/widgets.dart';
 
 void main() => runApp(new Application());
 
@@ -19,7 +20,7 @@ class Application extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new HomePage(title: 'Flutter Demo Home Page'),
+      home: new HomePage(title: 'Nome do personagem'),
     );
   }
 }
@@ -68,7 +69,17 @@ class _HomePageState extends State<HomePage> {
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+        leading:
+        new IconButton(
+          icon: new Icon(Icons.arrow_left),
+          tooltip: 'Air it',
+
+          ),
+
+        title: new MyAppBarText(),
+        actions: <Widget>[
+          new MyImagePerson()
+        ],
       ),
       body: new Center(
         // Center is a layout widget. It takes a single child and positions it
