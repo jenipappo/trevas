@@ -7,11 +7,11 @@ import 'package:trevas/model/Experience.dart';
 import 'package:trevas/model/Gender.dart';
 import 'package:trevas/model/Item.dart';
 import 'package:trevas/model/Mastery.dart';
+import 'package:trevas/model/Model.dart';
 import 'package:trevas/model/Weapon.dart';
 import 'package:trevas/model/WeaponMastery.dart';
 
-class Character {
-  final String id;
+class Character extends Model {
 
   /// Character photo URL.
   Uri photo;
@@ -64,7 +64,7 @@ class Character {
   /// are currently equipped.
   final List<Item> items = List();
 
-  Character(this.id);
+  Character(String id) : super(id);
 }
 
 class Attributes {

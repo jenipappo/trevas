@@ -4,9 +4,9 @@ import 'package:trevas/model/Item.dart';
 
 class Equipment extends Item {
   final EquipmentType type;
-  final List<AttributeBonus> bonuses = List();
+  final List<AttributeBonus> bonuses;
 
   String name;
 
-  Equipment(this.type);
+  Equipment(String id, this.name, this.type, this.bonuses) : super(id);
 }
