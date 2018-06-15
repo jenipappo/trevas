@@ -71,13 +71,13 @@ class _HomePageState extends State<HomePage> {
         // the App.build method, and use it to set our appbar title.
         leading: new IconButton(
           icon: new Icon(Icons.arrow_left),
-          tooltip: 'Air it',
+          tooltip: 'Air it', onPressed: () {},
 
-          ),
-          title: new MyAppBarText(),
-          actions: <Widget>[
-            new MyImagePerson()
-          ],
+        ),
+        title: new MyAppBarText(),
+        actions: <Widget>[
+          new MyImagePerson()
+        ],
       ),
       body: new Center(
         // Center is a layout widget. It takes a single child and positions it

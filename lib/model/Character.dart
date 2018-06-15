@@ -5,7 +5,6 @@ import 'package:trevas/model/Equipment.dart';
 import 'package:trevas/model/EquipmentType.dart';
 import 'package:trevas/model/Experience.dart';
 import 'package:trevas/model/Gender.dart';
-import 'package:trevas/model/Item.dart';
 import 'package:trevas/model/Mastery.dart';
 import 'package:trevas/model/Model.dart';
 import 'package:trevas/model/Weapon.dart';
@@ -60,14 +59,28 @@ class Character extends Model {
   /// List of all improvements for this character.
   /// Improvements include heroic points, magic objects, et al.
   final List<Enhancement> improvements = List();
-  /// Contains all items the character is carrying including items that
-  /// are currently equipped.
-  final List<Item> items = List();
 
   Character(String id) : super(id);
 }
 
 class Attributes {
+
+  static const _availableAttributes = [
+    AttributeType.constitution,
+    AttributeType.strength,
+    AttributeType.dexterity,
+    AttributeType.agility,
+    AttributeType.intelligence,
+    AttributeType.willpower,
+    AttributeType.perception,
+    AttributeType.charisma,
+    AttributeType.healthPoints,
+    AttributeType.magicPoints,
+    AttributeType.protectionIndex,
+    AttributeType.initiative,
+    AttributeType.heroism,
+    AttributeType.faith,
+  ];
 
   get constitution => _values[AttributeType.constitution];
   get strength => _values[AttributeType.strength];
@@ -83,21 +96,21 @@ class Attributes {
   get initiative => _values[AttributeType.initiative];
   get heroism => _values[AttributeType.heroism];
   get faith => _values[AttributeType.faith];
-  get baseDamage => _values[AttributeType.damage];
+  get baseDamage => _StrengthDerivedBaseDamage(this.strength);
 
-  get values => _values;
+  Map<AttributeType, Attribute> get values => _values;
 
   final Map<AttributeType, Attribute> _values = Map();
 
   Attributes() {
-    AttributeType.values.forEach((t) {
-      switch (t) {
-        case AttributeType.damage:
-          _values[t] = _StrengthDerivedBaseDamage(this.strength);
-          break;
+    _availableAttributes.forEach((t) => _values[t] = Attribute(t));
+  }
 
-        default:
-          _values[t] = Attribute(t);
+  void copyValuesFrom(List<Attribute> attributes) {
+    attributes.forEach((a) {
+      var attribute = _values[a.type];
+      if (attribute != null) {
+        attribute.value = a.value;
       }
     });
   }
