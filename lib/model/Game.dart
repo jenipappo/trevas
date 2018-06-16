@@ -1,16 +1,14 @@
-import 'package:trevas/model/Character.dart';
+import 'package:trevas/model/Model.dart';
 import 'package:trevas/model/User.dart';
 
-class Game {
-  final String id;
-
+class Game extends Model {
   String name;
   String description;
   User master;
   User owner;
+  int playerCount;
+  int characterCount;
 
-  final List<Character> characters = List();
-
-  Game(this.id, this.name, this.description, this.master, this.owner);
+  Game(String id, this.name, this.description, this.master, this.owner, this.playerCount, this.characterCount) :  super(id);
 
 }
