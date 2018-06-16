@@ -6,4 +6,12 @@ class DiceSet {
   int sides;
 
   DiceSet(this.quantity, this.sides);
+
+
+  @override
+  String toString() {
+    return '$quantity D$sides}';
+  }
+
+
 }
