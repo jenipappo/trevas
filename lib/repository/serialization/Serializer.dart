@@ -4,7 +4,9 @@ import 'package:trevas/model/AttributeType.dart';
 import 'package:trevas/model/DiceSet.dart';
 import 'package:trevas/model/Enhancement.dart';
 import 'package:trevas/model/Mastery.dart';
+import 'package:trevas/model/MasteryPonts.dart';
 import 'package:trevas/model/WeaponMastery.dart';
+import 'package:trevas/model/WeaponType.dart';
 
 abstract class Serializer<T> {
 
@@ -25,6 +27,8 @@ abstract class Serializer<T> {
       return _WeaponMasterySerializer() as Serializer<T>;
     } else if (T == Enhancement) {
       return _EnhancementSerializer() as Serializer<T>;
+    } else if (T == MasteryPoints) {
+      return _MasteryPointsSerializer() as Serializer<T>;
     } else {
       throw UnimplementedError("Serialization of this type is not yet implemented");
     }
@@ -107,14 +111,24 @@ class _WeaponMasterySerializer extends Serializer<WeaponMastery> {
 
   @override
   WeaponMastery deserialize(Map<String, dynamic> data) {
-    // TODO: implement deserialize
-    throw UnimplementedError();
+    var masteryPointsSerializer = Serializer<MasteryPoints>();
+
+    var weaponType = WeaponType.values.singleWhere((wt) => wt.toString() == data["weaponType"]);
+    var attackPoints = masteryPointsSerializer.deserialize(data["attackPoints"]);
+    var defensePoints = masteryPointsSerializer.deserialize(data["defencePoints"]);
+
+    return WeaponMastery(weaponType, attackPoints, defensePoints);
   }
 
   @override
   Map<String, dynamic> serialize(WeaponMastery vo) {
-    // TODO: implement serialize
-    throw UnimplementedError();
+    var masteryPointsSerializer = Serializer<MasteryPoints>();
+
+    return {
+      "weaponType": vo.weaponType.toString(),
+      "attackPoints": masteryPointsSerializer.serialize(vo.attackPoints),
+      "defencePoints": masteryPointsSerializer.serialize(vo.defensePoints)
+    };
   }
 
 }
@@ -125,14 +139,24 @@ class _MasterySerializer extends Serializer<Mastery> {
 
   @override
   Mastery deserialize(Map<String, dynamic> data) {
-    // TODO: implement deserialize
-    throw UnimplementedError();
+    var masteryPointsSerializer = Serializer<MasteryPoints>();
+
+    var name = data["name"];
+    var attributeType = AttributeType.values.singleWhere((at) => at.toString() == data["attributeType"]);
+    var points = masteryPointsSerializer.deserialize(data["points"]);
+
+    return Mastery(name, attributeType, points);
   }
 
   @override
   Map<String, dynamic> serialize(Mastery vo) {
-    // TODO: implement serialize
-    throw UnimplementedError();
+    var masteryPointsSerializer = Serializer<MasteryPoints>();
+
+    return {
+      "name": vo.name,
+      "attributeType": vo.attributeType.toString(),
+      "points": masteryPointsSerializer.serialize(vo.points)
+    };
   }
 
 }
@@ -143,14 +167,48 @@ class _EnhancementSerializer extends Serializer<Enhancement> {
 
   @override
   Enhancement deserialize(Map<String, dynamic> data) {
-    // TODO: implement deserialize
-    throw UnimplementedError();
+    var attributeBonusSerializer = Serializer<AttributeBonus>();
+
+    var level = data["level"];
+    var name = data["name"];
+    var description = data["description"];
+
+    var attributeBonusesRaw = data["attributeBonuses"] as List<Map<String, dynamic>>;
+    var attributeBonuses = attributeBonusesRaw.map((data) => attributeBonusSerializer.deserialize(data));
+
+    return Enhancement(name, description, level, attributeBonuses);
   }
 
   @override
   Map<String, dynamic> serialize(Enhancement vo) {
-    // TODO: implement serialize
-    throw UnimplementedError();
+    var attributeBonusSerializer = Serializer<AttributeBonus>();
+
+    return {
+      "level": vo.level,
+      "name": vo.name,
+      "description": vo.description,
+      "attributeBonuses": vo.attributeBonuses.map((bonus) => attributeBonusSerializer.serialize(bonus))
+    };
   }
 
 }
+
+class _MasteryPointsSerializer extends Serializer<MasteryPoints> {
+
+  _MasteryPointsSerializer() : super._initialize();
+
+  @override
+  MasteryPoints deserialize(Map<String, dynamic> data) {
+    var quantity = data["quantity"];
+    return MasteryPoints(quantity);
+  }
+
+  @override
+  Map<String, dynamic> serialize(MasteryPoints vo) {
+    return {
+      "quantity": vo.quantity,
+    };
+  }
+
+}
+

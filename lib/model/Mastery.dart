@@ -1,13 +1,12 @@
-import 'package:trevas/model/Attribute.dart';
+import 'package:trevas/model/AttributeType.dart';
 import 'package:trevas/model/MasteryPonts.dart';
 
 class Mastery {
   final String name;
-  final Attribute attribute;
+  final AttributeType attributeType;
+  final MasteryPoints points;
 
-  MasteryPoints points;
-
-  Mastery(this.name, this.attribute, this.points);
-
-  get percentage => attribute?.value ?? 0 + points.quantity;
+  Mastery(this.name, this.attributeType, this.points);
 }
+
+// TODO get percentage => attribute?.value ?? 0 + points.quantity;
