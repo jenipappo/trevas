@@ -9,10 +9,26 @@ class MyImagePerson extends StatelessWidget{
     return new Container(
       width: 48.0,
       height: 48.0,
+
+      decoration: new BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(
+          fit: BoxFit.fill,
+          image: new NetworkImage('https://firebasestorage.googleapis.com/v0/b/trevas-71c90.appspot.com/o/Joseph.png?alt=media&token=c627a296-327a-4955-8b26-1ad48c328d1c'),
+
+        ),
+        borderRadius: new BorderRadius.all(new Radius.circular(56.0)),
+        border: new Border.all(
+
+        width: 2.0,
+        ),
+      ),
+
+      /*
       decoration: new BoxDecoration(
 
         image: new DecorationImage(
-          image: new ExactAssetImage('assets/joseph.png'),
+          image: new ExactAssetImage('assets/joseph.png'), //new Image.network('https://firebasestorage.googleapis.com/v0/b/trevas-71c90.appspot.com/o/Joseph.png?alt=media&token=c627a296-327a-4955-8b26-1ad48c328d1c')
           fit: BoxFit.cover,
         ),
         borderRadius: new BorderRadius.all(new Radius.circular(56.0)),
@@ -20,7 +36,7 @@ class MyImagePerson extends StatelessWidget{
 
           width: 2.0,
         ),
-      ),
+      ), */
     );
 
       //Container(
