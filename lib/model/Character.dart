@@ -82,21 +82,21 @@ class Attributes {
     AttributeType.faith,
   ];
 
-  get constitution => _values[AttributeType.constitution];
-  get strength => _values[AttributeType.strength];
-  get dexterity => _values[AttributeType.dexterity];
-  get agility => _values[AttributeType.agility];
-  get intelligence => _values[AttributeType.intelligence];
-  get willpower => _values[AttributeType.willpower];
-  get perception => _values[AttributeType.perception];
-  get charisma => _values[AttributeType.charisma];
-  get healthPoints => _values[AttributeType.healthPoints];
-  get magicPoints => _values[AttributeType.magicPoints];
-  get protectionIndex => _values[AttributeType.protectionIndex];
-  get initiative => _values[AttributeType.initiative];
-  get heroism => _values[AttributeType.heroism];
-  get faith => _values[AttributeType.faith];
-  get baseDamage => _StrengthDerivedBaseDamage(this.strength);
+  Attribute get constitution => _values[AttributeType.constitution];
+  Attribute get strength => _values[AttributeType.strength];
+  Attribute get dexterity => _values[AttributeType.dexterity];
+  Attribute get agility => _values[AttributeType.agility];
+  Attribute get intelligence => _values[AttributeType.intelligence];
+  Attribute get willpower => _values[AttributeType.willpower];
+  Attribute get perception => _values[AttributeType.perception];
+  Attribute get charisma => _values[AttributeType.charisma];
+  Attribute get healthPoints => _values[AttributeType.healthPoints];
+  Attribute get magicPoints => _values[AttributeType.magicPoints];
+  Attribute get protectionIndex => _values[AttributeType.protectionIndex];
+  Attribute get initiative => _values[AttributeType.initiative];
+  Attribute get heroism => _values[AttributeType.heroism];
+  Attribute get faith => _values[AttributeType.faith];
+  Attribute get baseDamage => _StrengthDerivedBaseDamage(this.strength);
 
   Map<AttributeType, Attribute> get values => _values;
 
@@ -125,34 +125,34 @@ class Equipments {
   Equipment _ring;
   Equipment _amulet;
 
-  get headgear => _headgear;
-  get armor => _armor;
-  get boots => _boots;
-  get ring => _ring;
-  get amulet => _amulet;
+  Equipment get headgear => _headgear;
+  Equipment get armor => _armor;
+  Equipment get boots => _boots;
+  Equipment get ring => _ring;
+  Equipment get amulet => _amulet;
 
   set headgear(Equipment value) {
-    if (value.type != EquipmentType.headgear) return;
+    if (value != null && value.type != EquipmentType.headgear) return;
     _headgear = value;
   }
 
   set armor(Equipment value) {
-    if (value.type != EquipmentType.armor) return;
+    if (value != null && value.type != EquipmentType.armor) return;
     _armor = value;
   }
 
   set boots(Equipment value) {
-    if (value.type != EquipmentType.boots) return;
+    if (value != null && value.type != EquipmentType.boots) return;
     _boots = value;
   }
 
   set ring(Equipment value) {
-    if (value.type != EquipmentType.ring) return;
+    if (value != null && value.type != EquipmentType.ring) return;
     _ring = value;
   }
 
   set amulet(Equipment value) {
-    if (value.type != EquipmentType.amulet) return;
+    if (value != null && value.type != EquipmentType.amulet) return;
     _amulet = value;
   }
 }

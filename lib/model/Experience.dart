@@ -3,10 +3,10 @@ class Experience {
   int _value;
   int _level;
 
-  get value => _value;
-  get level => _level;
+  int get value => _value;
+  int get level => _level;
 
-  set value(value) {
+  set value(int value) {
     _value = value;
     _level = _xpToLevel.lastIndexWhere((xp) => value >= xp) + 1;
   }

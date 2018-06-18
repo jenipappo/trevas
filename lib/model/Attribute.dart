@@ -5,7 +5,7 @@ class Attribute {
 
   int value;
 
-  get percentage => value * 4;
+  int get percentage => value * 4;
 
   Attribute(this.type, [this.value]);
 }

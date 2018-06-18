@@ -10,7 +10,7 @@ class DiceSet {
 
   @override
   String toString() {
-    return '$quantity D$sides}';
+    return '${quantity}D$sides';
   }
 
 

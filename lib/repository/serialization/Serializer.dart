@@ -114,8 +114,8 @@ class _WeaponMasterySerializer extends Serializer<WeaponMastery> {
     var masteryPointsSerializer = Serializer<MasteryPoints>();
 
     var weaponType = WeaponType.values.singleWhere((wt) => wt.toString() == data["weaponType"]);
-    var attackPoints = masteryPointsSerializer.deserialize(data["attackPoints"]);
-    var defensePoints = masteryPointsSerializer.deserialize(data["defencePoints"]);
+    var attackPoints = masteryPointsSerializer.deserialize(Map<String, dynamic>.from(data["attackPoints"]));
+    var defensePoints = masteryPointsSerializer.deserialize(Map<String, dynamic>.from(data["defencePoints"]));
 
     return WeaponMastery(weaponType, attackPoints, defensePoints);
   }
@@ -143,7 +143,7 @@ class _MasterySerializer extends Serializer<Mastery> {
 
     var name = data["name"];
     var attributeType = AttributeType.values.singleWhere((at) => at.toString() == data["attributeType"]);
-    var points = masteryPointsSerializer.deserialize(data["points"]);
+    var points = masteryPointsSerializer.deserialize(Map<String, dynamic>.from(data["points"]));
 
     return Mastery(name, attributeType, points);
   }
@@ -173,8 +173,8 @@ class _EnhancementSerializer extends Serializer<Enhancement> {
     var name = data["name"];
     var description = data["description"];
 
-    var attributeBonusesRaw = data["attributeBonuses"] as List<Map<String, dynamic>>;
-    var attributeBonuses = attributeBonusesRaw.map((data) => attributeBonusSerializer.deserialize(data));
+    var attributeBonusesRaw = List.from(data["attributeBonuses"]);
+    var attributeBonuses = attributeBonusesRaw.map((data) => attributeBonusSerializer.deserialize(Map<String, dynamic>.from(data))).toList();
 
     return Enhancement(name, description, level, attributeBonuses);
   }
@@ -187,7 +187,7 @@ class _EnhancementSerializer extends Serializer<Enhancement> {
       "level": vo.level,
       "name": vo.name,
       "description": vo.description,
-      "attributeBonuses": vo.attributeBonuses.map((bonus) => attributeBonusSerializer.serialize(bonus))
+      "attributeBonuses": vo.attributeBonuses.map((bonus) => attributeBonusSerializer.serialize(bonus)).toList()
     };
   }
 

@@ -43,18 +43,22 @@ abstract class DocumentSerializer<T extends Model> implements Serializer<T> {
   Map<String, dynamic> _serialize(T model);
 
   T deserialize(Map<String, dynamic> data) {
+    if (data == null || data.isEmpty) return null;
     return _deserialize(data["id"], data);
   }
 
   T deserializeFromSnapshot(DocumentSnapshot snapshot) {
+    if (snapshot == null || snapshot.data == null || snapshot.data.isEmpty) return null;
     return _deserialize(snapshot.documentID, snapshot.data);
   }
 
   Map<String, dynamic> serialize(T model) {
+    if (model == null) return null;
     return _serialize(model);
   }
 
-  Map<String, dynamic>  serializeIncludingId(T model) {
+  Map<String, dynamic> serializeIncludingId(T model) {
+    if (model == null) return null;
     var map = _serialize(model);
     map["id"] = model.id;
     return map;
@@ -83,51 +87,51 @@ class _CharacterSerializer extends DocumentSerializer<Character> {
     character.religion = data["religion"];
     character.lore = data["lore"];
     character.birthday = DateTime.parse(data["birthday"]);
-    character.languages.addAll(data["languages"]);
+    character.languages.addAll(List.from(data["languages"]));
     character.experience.value = data["experience"];
 
     // weapons
     var weaponSerializer = DocumentSerializer<Weapon>();
-    character.equipments.leftHand = weaponSerializer.deserialize(data["equipments"]["leftHand"]);
-    character.equipments.rightHand = weaponSerializer.deserialize(data["equipments"]["rightHand"]);
+    character.equipments.leftHand = weaponSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["leftHand"]));
+    character.equipments.rightHand = weaponSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["rightHand"]));
 
     // equipments
     var equipmentSerializer = DocumentSerializer<Equipment>();
-    character.equipments.headgear = equipmentSerializer.deserialize(data["equipments"]["headgear"]);
-    character.equipments.armor = equipmentSerializer.deserialize(data["equipments"]["armor"]);
-    character.equipments.boots = equipmentSerializer.deserialize(data["equipments"]["boots"]);
-    character.equipments.ring = equipmentSerializer.deserialize(data["equipments"]["ring"]);
-    character.equipments.amulet = equipmentSerializer.deserialize(data["equipments"]["amulet"]);
+    character.equipments.headgear = equipmentSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["headgear"]));
+    character.equipments.armor = equipmentSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["armor"]));
+    character.equipments.boots = equipmentSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["boots"]));
+    character.equipments.ring = equipmentSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["ring"]));
+    character.equipments.amulet = equipmentSerializer.deserialize(Map<String, dynamic>.from(data["equipments"]["amulet"]));
 
     // attributes
     var attributeSerializer = Serializer<Attribute>();
-    var attributesRaw = data["attributes"] as List<Map<String, dynamic>>;
-    var attributes = attributesRaw.map((a) => attributeSerializer.deserialize(a));
+    var attributesRaw = List.from(data["attributes"]);
+    var attributes = attributesRaw.map((a) => attributeSerializer.deserialize(Map<String, dynamic>.from(a))).toList();
     character.attributes.copyValuesFrom(attributes);
 
     // weapon masteries
     var weaponMasterySerializer = Serializer<WeaponMastery>();
-    var weaponMasteriesRaw = data["weaponMasteries"] as List<Map<String, dynamic>>;
-    var weaponMasteries = weaponMasteriesRaw.map((e) => weaponMasterySerializer.deserialize(e));
+    var weaponMasteriesRaw = List.from(data["weaponMasteries"]);
+    var weaponMasteries = weaponMasteriesRaw.map((e) => weaponMasterySerializer.deserialize(Map<String, dynamic>.from(e))).toList();
     character.weaponMasteries.addAll(weaponMasteries);
 
     // masteries
     var masterySerializer = Serializer<Mastery>();
-    var masteriesRaw = data["masteries"] as List<Map<String, dynamic>>;
-    var masteries = masteriesRaw.map((e) => masterySerializer.deserialize(e));
+    var masteriesRaw = List.from(data["masteries"]);
+    var masteries = masteriesRaw.map((e) => masterySerializer.deserialize(Map<String, dynamic>.from(e))).toList();
     character.masteries.addAll(masteries);
 
     // enhancements
     var enhancementSerializer = Serializer<Enhancement>();
 
     // powers
-    var powersRaw = data["powers"] as List<Map<String, dynamic>>;
-    var powers = powersRaw.map((e) => enhancementSerializer.deserialize(e));
+    var powersRaw = List.from(data["powers"]);
+    var powers = powersRaw.map((e) => enhancementSerializer.deserialize(Map<String, dynamic>.from(e))).toList();
     character.powers.addAll(powers);
 
     // improvements
-    var improvementsRaw = data["improvements"] as List<Map<String, dynamic>>;
-    var improvements = improvementsRaw.map((e) => enhancementSerializer.deserialize(e));
+    var improvementsRaw = List.from(data["improvements"]);
+    var improvements = improvementsRaw.map((e) => enhancementSerializer.deserialize(Map<String, dynamic>.from(e))).toList();
     character.improvements.addAll(improvements);
 
     return character;
@@ -170,15 +174,15 @@ class _CharacterSerializer extends DocumentSerializer<Character> {
         "amulet": equipmentSerializer.serialize(model.equipments.amulet),
       },
       // attributes
-      "attributes": model.attributes.values.values.map((attr) => attributeSerializer.serialize(attr)),
+      "attributes": model.attributes.values.values.map((attr) => attributeSerializer.serialize(attr)).toList(),
       // weapon masteries
-      "weaponMasteries": model.weaponMasteries.map((wm) => weaponMasterySerializer.serialize(wm)),
+      "weaponMasteries": model.weaponMasteries.map((wm) => weaponMasterySerializer.serialize(wm)).toList(),
       // masteries
-      "masteries": model.masteries.map((m) => masterySerializer.serialize(m)),
+      "masteries": model.masteries.map((m) => masterySerializer.serialize(m)).toList(),
       // powers
-      "powers": model.powers.map((p) => enhancementSerializer.serialize(p)),
+      "powers": model.powers.map((p) => enhancementSerializer.serialize(p)).toList(),
       // improvements
-      "improvements": model.improvements.map((p) => enhancementSerializer.serialize(p)),
+      "improvements": model.improvements.map((p) => enhancementSerializer.serialize(p)).toList(),
     };
   }
 
@@ -249,10 +253,10 @@ class _WeaponSerializer extends DocumentSerializer<Weapon> {
     var attributeBonusSerializer = Serializer<AttributeBonus>();
 
     var name = data["name"];
-    var bonuses = (data["bonuses"] as List<Map<String, dynamic>>).map((m) => attributeBonusSerializer.deserialize(m));
+    var bonuses = List.from(data["bonuses"]).map((m) => attributeBonusSerializer.deserialize(Map<String, dynamic>.from(m))).toList();
     var weaponType = WeaponType.values.singleWhere((e) => e.toString() == data["weaponType"]);
     var baseDamage = data["baseDamage"] as int;
-    var dices = Serializer<DiceSet>().deserialize(data["dices"]);
+    var dices = Serializer<DiceSet>().deserialize(Map<String, dynamic>.from(data["dices"]));
 
     return Weapon(id, name, weaponType, baseDamage, dices, bonuses);
   }
@@ -265,7 +269,7 @@ class _WeaponSerializer extends DocumentSerializer<Weapon> {
     return {
       "name": weapon.name,
       "type": weapon.type.toString(),
-      "bonuses": weapon.bonuses.map((b) => attributeBonusSerializer.serialize(b)),
+      "bonuses": weapon.bonuses.map((b) => attributeBonusSerializer.serialize(b)).toList(),
       "weaponType": weapon.weaponType.toString(),
       "baseDamage": weapon.baseDamage.value,
       "dices":  Serializer<DiceSet>().serialize(weapon.dices)
@@ -284,7 +288,7 @@ class _EquipmentSerializer extends DocumentSerializer<Equipment> {
 
     var name = data["name"];
     var type = EquipmentType.values.singleWhere((e) => data["type"] == e.toString());
-    var bonuses = (data["bonuses"] as List<Map<String, dynamic>>).map((m) => attributeBonusSerializer.deserialize(m));
+    var bonuses = List.from(data["bonuses"]).map((m) => attributeBonusSerializer.deserialize(Map<String, dynamic>.from(m))).toList();
 
     return Equipment(id, name, type, bonuses);
   }
@@ -296,7 +300,7 @@ class _EquipmentSerializer extends DocumentSerializer<Equipment> {
     return {
       "name": vo.name,
       "type": vo.type.toString(),
-      "bonuses": vo.bonuses.map((b) => attributeBonusSerializer.serialize(b))
+      "bonuses": vo.bonuses.map((b) => attributeBonusSerializer.serialize(b)).toList()
     };
   }
 
