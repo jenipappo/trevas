@@ -1,4 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:trevas/model/AttributeBonus.dart';
+import 'package:trevas/model/AttributeType.dart';
+import 'package:trevas/model/Character.dart';
+import 'package:trevas/model/DiceSet.dart';
+import 'package:trevas/model/Enhancement.dart';
+import 'package:trevas/model/Equipment.dart';
+import 'package:trevas/model/EquipmentType.dart';
+import 'package:trevas/model/Gender.dart';
+import 'package:trevas/model/Mastery.dart';
+import 'package:trevas/model/MasteryPonts.dart';
+import 'package:trevas/model/Weapon.dart';
+import 'package:trevas/model/WeaponMastery.dart';
+import 'package:trevas/model/WeaponType.dart';
+import 'package:trevas/repository/CharacterRespository.dart';
+import 'package:trevas/ui/SignInPage.dart';
 import 'package:trevas/widgets.dart';
 
 void main() => runApp(new Application());
@@ -18,9 +33,14 @@ class Application extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.teal,
+        accentColor: Colors.tealAccent,
+        dividerColor: Colors.black38,
+        buttonColor: Colors.teal,
+        brightness: Brightness.light,
+
       ),
-      home: new HomePage(title: 'Nome do personagem'),
+      home: new SignInPage() //new HomePage(title: 'Nome do personagem'),
     );
   }
 }

@@ -228,15 +228,17 @@ class _UserSerializer extends DocumentSerializer<User> {
 
   @override
   User _deserialize(String id, Map<String, dynamic> data) {
+    var avatarImageUrl = data["avatarImageUrl"];
     var name = data["name"];
     var email = data["email"];
 
-    return User(id, name, email);
+    return User(id,avatarImageUrl, name, email);
   }
 
   @override
   Map<String, dynamic> _serialize(User user) {
     return {
+      "avatarImageUrl": user.avatarImageUrl,
       "name": user.name,
       "email": user.email
     };
